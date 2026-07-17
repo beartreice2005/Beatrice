@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Beatrice | Official Instrument Appeal</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #fff;
+        }
+        
+        .container { max-width: 1000px; margin: 0 auto; }
+        
+        .header {
+            text-align: center;
+            padding: 40px 20px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 20px;
+            margin-bottom: 30px;
+            border: 1px solid rgba(212,175,55,0.3);
+        }
+        
+        .verified {
+            display: inline-block;
+            background: rgba(212,175,55,0.2);
+            border: 1px solid #d4af37;
+            padding: 8px 20px;
+            border-radius: 50px;
+            color: #d4af37;
+            font-size: 0.85em;
+            margin-bottom: 15px;
+        }
+        
+        .header h1 {
+            font-size: 3em;
+            background: linear-gradient(135deg, #d4af37, #f4e4a6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 10px;
+        }
+        
+        .header p { color: #888; font-size: 1.2em; }
+        
+        .progress-section {
+            background: rgba(255,255,255,0.05);
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+            border: 1px solid rgba(212,175,55,0.2);
+        }
+        
+        .progress-bar {
+            width: 100%;
+            height: 35px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 20px;
+            overflow: hidden;
+            margin: 20px 0;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #d4af37, #f4e4a6);
+            width: 0%;
+            transition: width 1s ease;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            padding-right: 15px;
+            color: #000;
+            font-weight: bold;
+        }
+        
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            margin-top: 20px;
+        }
+        
+        .stat-box {
+            text-align: center;
+            padding: 20px;
+            background: rgba(212,175,55,0.05);
+            border-radius: 10px;
+            border: 1px solid rgba(212,175,55,0.1);
+        }
+        
+        .stat-number { font-size: 2em; font-weight: bold; color: #d4af37; }
+        .stat-label { color: #888; font-size: 0.9em; }
+        
+        .message {
+            text-align: center;
+            padding: 40px 20px;
+            margin-bottom: 30px;
+        }
+        
+        .message h2 { color: #d4af37; margin-bottom: 15px; font-size: 1.8em; }
+        .message p { color: #888; max-width: 600px; margin: 0 auto 20px; line-height: 1.6; }
+        
+        .exclusive {
+            display: inline-block;
+            background: rgba(212,175,55,0.1);
+            border: 1px solid #d4af37;
+            padding: 15px 30px;
+            border-radius: 10px;
+            color: #d4af37;
+        }
+        
+        .instruments-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .instrument-card {
+            background: rgba(255,255,255,0.05);
+            border-radius: 15px;
+            padding: 25px;
+            border: 1px solid rgba(255,255,255,0.1);
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        
+        .instrument-card:hover {
+            transform: translateY(-5px);
+            border-color: #d4af37;
+        }
+        
+        .instrument-card.claimed { opacity: 0.6; }
+        .instrument-card.claimed::after {
+            content: "CLAIMED";
+            position: absolute;
+            top: 10px; right: 10px;
+            background: #28a745;
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.8em;
+            font-weight: bold;
+        }
+        
+        .instrument-icon { font-size: 3em; margin-bottom: 10px; }
+        .instrument-name { font-size: 1.2em; font-weight: bold; margin-bottom: 8px; }
+        .instrument-price { font-size: 1.5em; color: #d4af37; font-weight: bold; margin-bottom: 10px; }
+        .instrument-desc { color: #888; font-size: 0.9em; margin-bottom: 15px; }
+        
+        .claim-btn {
+            width: 100%;
+            padding: 12px;
+            background: transparent;
+            border: 2px solid #d4af37;
+            color: #d4af37;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .claim-btn:hover:not(:disabled) {
+            background: #d4af37;
+            color: #000;
+        }
+        
+        .claim-btn:disabled {
+            border-color: #28a745;
+            color: #28a745;
+            cursor: not-allowed;
+        }
+        
+        .form-section {
+            background: rgba(255,255,255,0.05);
+            border-radius: 15px;
+            padding: 40px;
+            max-width: 600px;
+            margin: 0 auto 30px;
+            border: 1px solid rgba(212,175,55,0.2);
+        }
+        
+        .form-section h2 { text-align: center; color: #d4af37; margin-bottom: 10px; }
+        .form-section p { text-align: center; color: #888; margin-bottom: 30px; }
+        
+        .form-group { margin-bottom: 20px; }
+        .form-group label { display: block; margin-bottom: 8px; color: #fff; }
+        .form-group input, .form-group select, .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 8px;
+            color: #fff;
+            font-size: 1em;
+        }
+        .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+            outline: none; border-color: #d4af37;
+        }
+        
+        .submit-btn {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #d4af37, #f4e4a6);
+            color: #000;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1em;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        
+        .submit-btn:hover { transform: scale(1.02); }
+        
+        .trust {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+        .trust-item { color: #888; font-size: 0.9em; }
+        
+        .thank-you {
+            display: none;
+            text-align: center;
+            padding: 40px;
+            background: rgba(40,167,69,0.1);
+            border: 1px solid #28a745;
+            border-radius: 15px;
+            max-width: 600px;
+            margin: 0 auto 30px;
+        }
+        .thank-you h2 { color: #28a745; font-size: 2em; margin-bottom: 15px; }
+        .thank-you p { color: #888; }
+        
+        .footer {
+            text-align: center;
+            padding: 30px;
+            color: #888;
+            border-top: 1px solid rgba(255,255,255,0.1);
+        }
+        .footer strong { color: #d4af37; }
+        
+        .lang-switch {
+            position: fixed;
+            top: 20px; right: 20px;
+            background: rgba(212,175,55,0.2);
+            border: 1px solid #d4af37;
+            padding: 10px 20px;
+            border-radius: 30px;
+            color: #d4af37;
+            text-decoration: none;
+        }
+        .lang-switch:hover { background: #d4af37; color: #000; }
+        
+        @media (max-width: 768px) {
+            .stats { grid-template-columns: 1fr; }
+            .header h1 { font-size: 2em; }
+        }
+    </style>
+</head>
+<body>
+    <a href="beatrice-german.html" class="lang-switch">🇩🇪 Deutsch</a>
+    
+    <div class="container">
+        <div class="header">
+            <div class="verified">✓ Official Verified Campaign</div>
+            <h1>BEATRICE</h1>
+            <p>Official Instrument Appeal — Join my exclusive circle of supporters</p>
+        </div>
+        
+        <div class="progress-section">
+            <h3 style="text-align: center; color: #d4af37; margin-bottom: 10px;">Campaign Progress</h3>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressBar">0%</div>
+            </div>
+            <div class="stats">
+                <div class="stat-box">
+                    <div class="stat-number" id="totalRaised">€0</div>
+                    <div class="stat-label">Raised</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-number" id="targetAmount">€12,450</div>
+                    <div class="stat-label">Goal</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-number" id="spotsLeft">10</div>
+                    <div class="stat-label">Spots Left</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="message">
+            <h2>A Personal Message from Beatrice</h2>
+            <p>Thank you for being part of my journey. Your support means everything to me. I'm looking to upgrade my studio with professional instruments that will help me create the music you love even better.</p>
+            <div class="exclusive">✨ Exclusive: Only 10 Instruments Available ✨</div>
+        </div>
+        
+        <div class="instruments-grid" id="instrumentsGrid"></div>
+        
+        <div class="form-section" id="formSection">
+            <h2>Become a Supporter</h2>
+            <p>Secure your spot in Beatrice's exclusive supporter circle</p>
+            
+            <form id="supportForm">
+                <div class="form-group">
+                    <label>Full Name *</label>
+                    <input type="text" id="name" required placeholder="Your name">
+                </div>
+                <div class="form-group">
+                    <label>Email *</label>
+                    <input type="email" id="email" required placeholder="your@email.com">
+                </div>
+                <div class="form-group">
+                    <label>Select Instrument *</label>
+                    <select id="instrument" required>
+                        <option value="">Choose an instrument...</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Message (Optional)</label>
+                    <textarea id="msg" rows="3" placeholder="Your message to Beatrice..."></textarea>
+                </div>
+                <button type="submit" class="submit-btn">Confirm My Support</button>
+                <div class="trust">
+                    <span class="trust-item">🔒 SSL Secured</span>
+                    <span class="trust-item">✓ Verified</span>
+                    <span class="trust-item">♥ Official</span>
+                </div>
+            </form>
+        </div>
+        
+        <div class="thank-you" id="thankYou">
+            <h2>🎉 Thank You!</h2>
+            <p>Your support has been received. Check your email for payment instructions.</p>
+        </div>
+        
+        <div class="footer">
+            <p>© 2026 <strong>Beatrice</strong>. All Rights Reserved.</p>
+            <p>Official Instrument Appeal Campaign</p>
+        </div>
+    </div>
+
+    <script>
+        const instruments = [
+            { id: 1, name: "Yamaha Digital Piano P-125", price: 1200, icon: "🎹", desc: "88-key weighted action for professional composing" },
+            { id: 2, name: "Fender Player Stratocaster", price: 950, icon: "🎸", desc: "Classic electric guitar for studio recordings" },
+            { id: 3, name: "Pearl Roadshow Drum Kit", price: 850, icon: "🥁", desc: "Complete 5-piece acoustic set with hardware" },
+            { id: 4, name: "Yamaha YAS-280 Saxophone", price: 1100, icon: "🎷", desc: "Professional alto sax for jazz sessions" },
+            { id: 5, name: "Stentor Student II Violin", price: 1500, icon: "🎻", desc: "Full-size violin with bow and hard case" },
+            { id: 6, name: "AKAI MPK249 MIDI Controller", price: 400, icon: "🎹", desc: "49-key MIDI for electronic production" },
+            { id: 7, name: "Shure SM7B Microphone", price: 650, icon: "🎤", desc: "Industry-standard vocal recording mic" },
+            { id: 8, name: "Boss ME-80 Multi-Effects", price: 350, icon: "🎛️", desc: "Guitar effects pedalboard" },
+            { id: 9, name: "Focusrite Scarlett 4i4", price: 450, icon: "🔊", desc: "4-in/4-out USB audio interface" },
+            { id: 10, name: "Native Instruments Komplete 14", price: 600, icon: "💿", desc: "Complete production software suite" }
+        ];
+
+        let claimed = [];
+        let raised = 0;
+
+        function formatEUR(n) { return '€' + n.toLocaleString('de-DE'); }
+
+        function render() {
+            const grid = document.getElementById('instrumentsGrid');
+            grid.innerHTML = '';
+            
+            instruments.forEach(inst => {
+                const isClaimed = claimed.includes(inst.id);
+                const card = document.createElement('div');
+                card.className = 'instrument-card ' + (isClaimed ? 'claimed' : '');
+                card.innerHTML = `
+                    <div class="instrument-icon">${inst.icon}</div>
+                    <div class="instrument-name">${inst.name}</div>
+                    <div class="instrument-price">${formatEUR(inst.price)}</div>
+                    <div class="instrument-desc">${inst.desc}</div>
+                    <button class="claim-btn" onclick="selectInst(${inst.id})" ${isClaimed ? 'disabled' : ''}>
+                        ${isClaimed ? 'Claimed' : 'Support This'}
+                    </button>
+                `;
+                grid.appendChild(card);
+            });
+
+            const target = instruments.reduce((a,b) => a + b.price, 0);
+            const pct = Math.round((raised / target) * 100) || 0;
+            document.getElementById('progressBar').style.width = pct + '%';
+            document.getElementById('progressBar').textContent = pct + '%';
+            document.getElementById('totalRaised').textContent = formatEUR(raised);
+            document.getElementById('spotsLeft').textContent = 10 - claimed.length;
+
+            const select = document.getElementById('instrument');
+            select.innerHTML = '<option value="">Choose an instrument...</option>';
+            instruments.forEach(inst => {
+                if (!claimed.includes(inst.id)) {
+                    select.innerHTML += `<option value="${inst.id}">${inst.icon} ${inst.name} — ${formatEUR(inst.price)}</option>`;
+                }
+            });
+        }
+
+        function selectInst(id) {
+            document.getElementById('instrument').value = id;
+            document.getElementById('formSection').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        document.getElementById('supportForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const id = parseInt(document.getElementById('instrument').value);
+            if (!id) return alert('Please select an instrument');
+            
+            const inst = instruments.find(i => i.id === id);
+            claimed.push(id);
+            raised += inst.price;
+            
+            document.getElementById('formSection').style.display = 'none';
+            document.getElementById('thankYou').style.display = 'block';
+            document.getElementById('thankYou').scrollIntoView({ behavior: 'smooth' });
+            
+            render();
+        });
+
+        render();
+    </script>
+</body>
+</html>
